@@ -1,0 +1,169 @@
+#include <iostream>
+#include <string>
+#include<iomanip>
+
+using namespace std;
+enum phonetype {athome  , atwork  , fax , mobile , other} ;
+typedef struct person {
+string name ;
+string number ;
+ phonetype type ;
+
+};
+const int max_names = 100 ;
+person listofcontacts [max_names]={};
+int stored_names = 0 ;
+
+
+ bool addcontact()
+ {
+if (stored_names < max_names ){
+    cout<< "enter   phone number:  " ;
+    cin >>  listofcontacts[stored_names].number;
+    cout<< "enter contact name  :  "  << endl ;
+    cin.ignore();
+    getline(cin , listofcontacts[stored_names].name ) ;
+    cout << "enter phone type (types of phone from example  ): " ;
+    char i;
+    cin >> i;
+    switch (i) {
+case 'h':
+    listofcontacts[stored_names].type=athome;     break;
+case 'w' :
+    listofcontacts[stored_names].type=atwork  ;  break;
+case 'f' :
+    listofcontacts[stored_names].type=fax;   break;
+case 'm' :
+   listofcontacts[stored_names].type=mobile;    break;
+case 'o' :
+    listofcontacts[stored_names].type=other ;   break;
+    }
+    listofcontacts[stored_names].type ;
+
+    stored_names ++ ;
+    return true ;
+
+}
+return false ;
+
+ }
+bool delete_contact ()
+{
+    string searched_contact ;
+    int compare=0;
+    cout<< "enter contact name  :  " ;
+    cin.ignore();
+    getline(cin , searched_contact ) ;
+    person temp [max_names]={};
+    unsigned j = 0;
+    for (int i = 0 ; i < stored_names ; i++)
+    {
+        if(searched_contact== listofcontacts[i].name){
+           compare++;
+        }else{
+            temp[j] = listofcontacts[i];
+            j++;
+        }
+    }
+    if (compare==0)
+        return false ;
+    stored_names -= compare;
+    for (int i = 0 ; i < max_names ; i++)
+    {
+        listofcontacts[i] = temp[i] ;
+    }
+    return true;
+}
+void showallcontacts(){
+bool sortcheck ;
+person temp ;
+
+do {
+    sortcheck = true ;
+    if (stored_names > 0){
+        for(int i= 0  ; i< stored_names-1 ;i++  ){
+            if(listofcontacts[i].name.compare(listofcontacts[i+1].name)>0 ){
+                temp = listofcontacts[i] ;
+                listofcontacts[i]=listofcontacts[i+1];
+                listofcontacts[i+1] = temp ;
+                sortcheck = false ;
+            }
+        }
+    }
+
+} while(sortcheck== false );
+
+    for(int i = 0 ; i<stored_names ; i++  ){
+        string x ;
+            switch (listofcontacts[i].type) {
+case 0:
+    x= "athome";     break;
+case 1 :
+    x= "atwork"   ;  break;
+case 2 :
+    x="fax" ;   break;
+case 3 :
+    x="mobile";    break;
+case 4 :
+
+     x= "other" ;   break;
+    }
+
+
+
+        if (listofcontacts[i].name.length()!=0)
+            cout << listofcontacts[i].name << setw(20) << listofcontacts[i].number << setw(20)<< "("<< x << ")" <<endl;
+
+    }
+
+    }
+
+
+
+int main()
+{
+
+
+    while(1) {
+    char choice ;
+    cout<< "\n ***"<<stored_names << " contacts entries ***"<<endl;
+    cout << "0 end " << endl;
+    cout<< "1 new contact " << endl;
+    cout<< "2 delete a contact " << endl;
+    cout << "3 show all the contacts "<< endl ;
+    cout<< "9 empty the memory " << endl;
+    cin>> choice ;
+
+        switch (choice)
+{
+
+case '1' :
+   addcontact() ; break ;
+case '2' :
+    delete_contact() ;
+    cout<< "contact deleted " ;
+    break;
+
+case '3' :
+    showallcontacts() ; break ;
+case '9' :
+
+      {
+          for (int x=0 ;x<stored_names ; x++){
+            listofcontacts[x].name = "" ;
+            listofcontacts[x].number = "" ;
+
+          }
+         cout << "memory is already empty " ;
+         break ;
+
+
+      };
+
+default: return 0;
+}
+    }
+
+
+    return 0;
+}
